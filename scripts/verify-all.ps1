@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  esc32 全量软件验证：编译仿真 + 全部硬件 Target 链接 + E2E
+  Full esc32 software verification: build simulator + link all hardware targets + run E2E.
 #>
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)

@@ -1,5 +1,5 @@
 /**
- * Target: ESC-200 + STM32H743（规划）
+ * Target: ESC-200 + STM32H743 (planned)
  */
 #ifndef ESC_TARGET_ESC200_H743_H
 #define ESC_TARGET_ESC200_H743_H

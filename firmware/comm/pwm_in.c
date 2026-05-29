@@ -47,7 +47,7 @@ float pwm_in_norm(const pwm_input_t *in, const esc_params_t *p)
 
 bool pwm_in_is_lost(const pwm_input_t *in, const esc_params_t *p)
 {
-    /* 仅「曾收到有效 PWM」后才视为丢失（上电无信号不报警） */
+    /* Loss only after valid PWM was seen (no alarm on power-up with no signal) */
     return in->link_established && !in->valid &&
            in->lost_ms >= p->ppm_lost_time_ms;
 }

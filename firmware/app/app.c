@@ -182,7 +182,7 @@ void app_run_once(void)
 {
     s_rt.uptime_ms = hal_millis();
 #ifdef ESC_PLATFORM_SIM
-    /* 仿真：每圈处理 UDP，避免调度粒度导致调试协议超时 */
+    /* Simulation: poll UDP each loop to avoid debug protocol timeouts from scheduler granularity */
     comm_poll();
 #endif
     scheduler_run(hal_time_us());

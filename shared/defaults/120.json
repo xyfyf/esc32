@@ -1,6 +1,6 @@
 {
   "config_name": "ESC-120",
-  "description": "超重载 25kg+ 单轴",
+  "description": "Heavy load, 25 kg+ per arm",
   "motor_kv": 120,
   "motor_pole_pairs": 28,
   "motor_ld_uh": 24.0,

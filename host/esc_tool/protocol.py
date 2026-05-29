@@ -1,4 +1,4 @@
-"""esc32 调试协议（与 shared/protocol/protocol 对齐）"""
+"""esc32 debug protocol (mirrors shared/protocol/protocol)."""
 from __future__ import annotations
 
 import struct

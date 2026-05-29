@@ -19,7 +19,7 @@ if ($makeCmd -and (Get-Command gcc -ErrorAction SilentlyContinue)) {
     cmake -B build -DCMAKE_BUILD_TYPE=Debug -DESC_PLATFORM=$Platform
     cmake --build build --config Debug
 } else {
-    Write-Warning "未找到 gcc/make/cmake。请运行: powershell -File scripts\setup-build-env.ps1"
+    Write-Warning "gcc/make/cmake not found. Run: powershell -File scripts\setup-build-env.ps1"
 }
 Pop-Location
 
@@ -29,4 +29,4 @@ if (-not (Test-Path ".venv")) { python -m venv .venv }
 & .\.venv\Scripts\pip install -q -r requirements.txt
 Pop-Location
 
-Write-Host "完成。仿真: firmware\esc32_sim.exe + host 上位机 --sim-udp" -ForegroundColor Green
+Write-Host "Done. Simulation: firmware\esc32_sim.exe + host GUI with --sim-udp" -ForegroundColor Green

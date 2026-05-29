@@ -1,6 +1,6 @@
 {
   "config_name": "ESC-200",
-  "description": "特重载 35kg 级单轴",
+  "description": "Extra heavy load, ~35 kg per arm",
   "motor_kv": 90,
   "motor_pole_pairs": 32,
   "motor_ld_uh": 18.0,

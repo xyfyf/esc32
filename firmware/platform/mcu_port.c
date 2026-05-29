@@ -1,6 +1,6 @@
 /**
  * @file mcu_port.c
- * @brief 由 Target 所含 mcu_conf.h 生成能力表（编译期，无运行时探测）
+ * @brief Build capability table from the target's mcu_conf.h (compile-time, no runtime probe)
  */
 #include "mcu_port.h"
 #include "target.h"

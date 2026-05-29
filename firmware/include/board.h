@@ -2,7 +2,7 @@
 #define ESC_BOARD_H
 
 /**
- * @deprecated 请使用 product.h / target.h；本头文件保留兼容旧代码。
+ * @deprecated Use product.h / target.h instead; this header is kept for backward compatibility.
  */
 #include "product.h"
 #include "target.h"

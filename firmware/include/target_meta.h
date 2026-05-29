@@ -1,6 +1,6 @@
 /**
  * @file target_meta.h
- * @brief 编译 Target 元数据（由 boards/targets/<TARGET>/target.h 提供）
+ * @brief Build-time target metadata (supplied by boards/targets/<TARGET>/target.h)
  */
 #ifndef ESC_TARGET_META_H
 #define ESC_TARGET_META_H

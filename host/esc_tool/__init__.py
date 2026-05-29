@@ -1,2 +1,2 @@
-"""esc_tool — esc32 电调上位机"""
+"""esc_tool — host-side toolkit for the esc32 ESC."""
 __version__ = "0.1.0"

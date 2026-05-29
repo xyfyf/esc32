@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* UAVCAN v0 消息 ID（equipment.esc） */
+/* UAVCAN v0 message IDs (equipment.esc) */
 #define UAVCAN_ESC_RAWCOMMAND_ID   1030u
 #define UAVCAN_ESC_STATUS_ID       1034u
 #define UAVCAN_ESC_STATUSEXT_ID    1035u

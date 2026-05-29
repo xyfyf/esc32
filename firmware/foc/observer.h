@@ -16,7 +16,7 @@ typedef struct {
     float theta;
     float omega;
     float filter_hz;
-    /* SMO 状态 */
+    /* SMO state */
     float alpha_est;
     float beta_est;
     float lambda_smo;

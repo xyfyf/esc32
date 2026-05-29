@@ -1,6 +1,6 @@
 {
   "config_name": "ESC-80",
-  "description": "农业 17kg 级单轴",
+  "description": "Agricultural drone, ~17 kg per arm",
   "motor_kv": 170,
   "motor_pole_pairs": 21,
   "motor_ld_uh": 29.0,

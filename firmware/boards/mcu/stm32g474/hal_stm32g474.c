@@ -1,16 +1,16 @@
 /**
  * @file hal_stm32g474.c
- * @brief STM32G474 生产 HAL 骨架（CubeMX 生成后填入寄存器操作）
+ * @brief STM32G474 production HAL skeleton (fill in register access after CubeMX generation)
  *
- * 编译：mingw32-make target80-hal  （链接验证）
- * 真机：在 STM32CubeIDE 中合并本文件与 CubeMX 生成的 tim/adc/fdcan 初始化。
+ * Build: mingw32-make target80-hal  (link verification)
+ * On hardware: merge this file with CubeMX-generated tim/adc/fdcan init in STM32CubeIDE.
  */
 #ifndef ESC_PLATFORM_SIM
 
 #include "hal.h"
 #include <string.h>
 
-/* 引脚定义见 pinmap.h（真机编译时由 CubeMX 工程包含） */
+/* Pin definitions live in pinmap.h (included by the CubeMX project on hardware) */
 
 /* TODO: #include "stm32g4xx_hal.h" */
 
@@ -21,8 +21,8 @@ void hal_init(void)
     s_tick_ms = 0;
     /* TODO: HAL_Init(); SystemClock_Config(); MX_GPIO_Init(); */
     /* TODO: MX_TIM1_Init(); MX_ADC1_Init(); MX_ADC2_Init(); MX_FDCAN1_Init(); */
-    /* TODO: MX_TIM3_Init(); 输入捕获 PWM_IN */
-    /* TODO: DRV8323 SPI 初始化 */
+    /* TODO: MX_TIM3_Init(); input capture for PWM_IN */
+    /* TODO: DRV8323 SPI initialization */
 }
 
 uint32_t hal_time_us(void)
@@ -58,12 +58,12 @@ void hal_adc_read(float *vbus, float *ibus, float *ia, float *ib, float *ic,
     *ib = 0.0f;
     *ic = 0.0f;
     *temp_mos = 25.0f;
-    /* TODO: 注入采样 + 母线/NTC 换算 */
+    /* TODO: injected sampling + bus-voltage / NTC scaling */
 }
 
 uint16_t hal_pwm_input_us(void)
 {
-    /* TODO: TIM3 输入捕获脉宽 µs */
+    /* TODO: TIM3 input-capture pulse width (µs) */
     return 1000;
 }
 
@@ -89,7 +89,7 @@ int hal_uart_read(uint8_t *data, size_t cap)
 void hal_can_init(uint32_t baudrate)
 {
     (void)baudrate;
-    /* TODO: FDCAN1 1 Mbps, 过滤器接受扩展帧 */
+    /* TODO: FDCAN1 1 Mbps, filter accepts extended frames */
 }
 
 int hal_can_send(uint32_t can_id, const uint8_t *data, uint8_t len)

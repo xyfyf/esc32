@@ -1,6 +1,6 @@
 /**
  * @file pinmap.h
- * @brief ESC-80 STM32G474 引脚映射（与 docs/hardware/STM32G474引脚与接口.md 一致）
+ * @brief ESC-80 STM32G474 pin mapping (matches docs/hardware/STM32G474引脚与接口.md)
  */
 #ifndef ESC_STM32G474_PINMAP_H
 #define ESC_STM32G474_PINMAP_H

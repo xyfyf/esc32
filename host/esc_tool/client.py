@@ -1,4 +1,4 @@
-"""调试协议客户端"""
+"""Debug protocol client."""
 from __future__ import annotations
 
 import struct
@@ -21,7 +21,7 @@ class EscInfo:
 
     @property
     def board_id(self) -> int:
-        """兼容旧字段名"""
+        """Legacy field alias."""
         return self.product_id
 
 

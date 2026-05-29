@@ -81,7 +81,7 @@ bool fault_log_load_flash(void)
     if (hal_nvm_read(0, s_log, sizeof(s_log)) != 0) {
         return false;
     }
-    /* 从 NVM 恢复：根据首条时间戳判断是否有效 */
+    /* Restore from NVM: use the first record's timestamp to detect blank flash */
     if (s_log[0].timestamp_ms == 0xFFFFFFFFu) {
         return false;
     }

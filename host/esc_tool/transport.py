@@ -1,4 +1,4 @@
-"""串口 / UDP 传输层"""
+"""Serial / UDP transports."""
 from __future__ import annotations
 
 import socket
@@ -12,7 +12,7 @@ class Transport(Protocol):
 
 class UdpTransport:
     def __init__(self, host: str, port: int, local_port: int = 0) -> None:
-        """local_port=0 由系统自动分配，避免多开 GUI 时 WinError 10048"""
+        """local_port=0 lets the OS assign a port and avoids WinError 10048 when multiple GUIs run."""
         self._addr = (host, port)
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._sock.bind(("", local_port))

@@ -1,6 +1,6 @@
 /**
  * @file mcu_conf.h
- * @brief STM32G431 — ESC-60 / 轻中载 FOC（优先于 G474 移植的第二款真机）
+ * @brief STM32G431 — ESC-60 / light-medium FOC (second hardware port priority after G474)
  */
 #ifndef ESC_STM32G431_MCU_CONF_H
 #define ESC_STM32G431_MCU_CONF_H

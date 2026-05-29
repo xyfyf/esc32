@@ -1,4 +1,4 @@
-"""PyQt6 上位机：参数 / 遥测曲线 / 电机向导 / 批量配置 / 固件升级"""
+"""PyQt6 host GUI: params / telemetry plots / motor wizard / batch config / firmware OTA."""
 from __future__ import annotations
 
 import struct
@@ -78,7 +78,7 @@ class MainWindow(QMainWindow):
         self._build_fault_tab()
         self._build_batch_tab()
         self._build_fw_tab()
-        self._tabs.addTab(MotorWizardWidget(self._get_client), "电机向导")
+        self._tabs.addTab(MotorWizardWidget(self._get_client), "Motor向导")
 
         ctrl = QHBoxLayout()
         btn_arm = QPushButton("解锁")

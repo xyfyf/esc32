@@ -1,5 +1,5 @@
 /**
- * Target: PC 仿真（无硬件）
+ * Target: PC simulation (no hardware)
  * FILE_NAME: ESC_SIM
  */
 #ifndef ESC_TARGET_ESC_SIM_H

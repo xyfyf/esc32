@@ -1,8 +1,8 @@
 /**
  * @file protocol.h
- * @brief esc32 上位机 <-> 固件 调试/调参协议（UART 或 UDP 承载）
+ * @brief esc32 host <-> firmware debug/tuning protocol (UART or UDP transport)
  *
- * 帧格式: [0xEC][0x32][CMD][LEN_L][LEN_H][PAYLOAD...][CRC16_L][CRC16_H]
+ * Frame layout: [0xEC][0x32][CMD][LEN_L][LEN_H][PAYLOAD...][CRC16_L][CRC16_H]
  * CRC16: Modbus/IBM polynomial 0xA001, init 0xFFFF, over CMD+LEN+PAYLOAD
  */
 #ifndef ESC_PROTOCOL_H
@@ -17,7 +17,7 @@
 #define ESC_PROTO_CRC_SIZE    2u
 #define ESC_PROTO_MAX_PAYLOAD 512u
 
-/** 协议版本，与固件 ESC_FW_PROTO_VERSION 一致 */
+/** Protocol version; must match firmware ESC_FW_PROTO_VERSION */
 #define ESC_PROTO_VERSION     3u
 
 typedef enum {
@@ -51,14 +51,14 @@ typedef enum {
 
 typedef struct {
     uint8_t  proto_version;
-    uint8_t  mcu_id;          /* 见 firmware/include/mcu_catalog.h */
+    uint8_t  mcu_id;          /* see firmware/include/mcu_catalog.h */
     uint16_t product_id;    /* 0x60 / 0x80 / 0x120 / 0x200 */
     uint16_t fw_version;      /* major<<8 | minor */
-    uint16_t target_id;       /* 编译 Target，如 0x8081 */
-    uint16_t hw_revision;     /* PCB 修订 */
-    char     name[16];        /* 固件名 / Target 简称 */
+    uint16_t target_id;       /* build target id, e.g. 0x8081 */
+    uint16_t hw_revision;     /* PCB revision */
+    char     name[16];        /* Firmware name / target short name */
     char     build_date[12];
-    uint8_t  feature_flags;   /* bit0 提示音 bit1 UAVCAN */
+    uint8_t  feature_flags;   /* bit0 motor beep, bit1 UAVCAN */
     uint8_t  port_status;     /* 0=ready 1=stub 2=planned */
     uint8_t  reserved[2];
 } esc_info_rsp_t;
@@ -77,7 +77,7 @@ typedef struct {
 typedef struct {
     uint16_t total;
     uint16_t returned;
-    /* 后跟 returned 条 fault_log_entry_t（18 字节/条，见 fault_log.h） */
+    /* followed by `returned` fault_log_entry_t records (18 bytes each; see fault_log.h) */
 } esc_fault_log_rsp_hdr_t;
 
 typedef struct {
@@ -98,13 +98,13 @@ typedef struct {
 
 uint16_t proto_crc16(const uint8_t *data, size_t len);
 
-/** 组帧到 out，返回总长度；缓冲区至少 header+payload+crc */
+/** Pack frame into out; returns total length; buffer needs header+payload+crc */
 size_t frame_pack(uint8_t cmd, const uint8_t *payload, uint16_t len,
                       uint8_t *out, size_t out_cap);
 
 /**
- * 解析状态机喂入字节，完整帧时 callback(cmd,payload,len)
- * @return 0 继续，1 帧完成，<0 错误需复位
+ * Parser state machine: feed bytes; callback(cmd,payload,len) on complete frame
+ * @return 0 continue, 1 frame done, <0 error (reset parser)
  */
 typedef int (*frame_handler_t)(uint8_t cmd, const uint8_t *payload,
                                    uint16_t len, void *user);

@@ -1,4 +1,4 @@
-"""命令行上位机（P0 最小功能）"""
+"""Command-line host tool (minimal P0 feature set)."""
 from __future__ import annotations
 
 import argparse
@@ -20,12 +20,12 @@ PARAM_NAMES = [
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="esc32 电调调参工具")
+    ap = argparse.ArgumentParser(description="esc32 ESC tuning tool")
     g = ap.add_mutually_exclusive_group(required=True)
-    g.add_argument("--sim-udp", metavar="HOST:PORT", help="连接仿真 UDP，如 127.0.0.1:7777")
-    g.add_argument("--serial", metavar="PORT", help="串口，如 COM3")
+    g.add_argument("--sim-udp", metavar="HOST:PORT", help="Connect to the simulator over UDP, e.g. 127.0.0.1:7777")
+    g.add_argument("--serial", metavar="PORT", help="Serial port, e.g. COM3")
     ap.add_argument("--baud", type=int, default=115200)
-    ap.add_argument("--gui", action="store_true", help="启动图形界面")
+    ap.add_argument("--gui", action="store_true", help="Launch the graphical UI")
     ap.add_argument("command", nargs="?", default="shell",
                     choices=["ping", "info", "telem", "params", "defaults", "save",
                              "faults", "shell"])

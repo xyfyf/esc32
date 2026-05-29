@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# 一键闭环：编译固件 -> 启动仿真 -> E2E 测试 -> 报告
+# One-click closed loop: build firmware -> start simulator -> E2E tests -> report
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 

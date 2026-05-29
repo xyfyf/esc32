@@ -1,6 +1,6 @@
 /**
  * @file hal_sim.c
- * @brief PC 仿真 HAL：UDP 协议 + 虚拟传感器
+ * @brief PC simulation HAL: UDP transport + virtual sensors
  */
 #ifdef ESC_PLATFORM_SIM
 

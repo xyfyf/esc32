@@ -1,6 +1,6 @@
 /**
  * @file uavcan.c
- * @brief UAVCAN v0 单/多帧传输（CRC + 尾字节）
+ * @brief UAVCAN v0 single/multi-frame transfer (CRC + tail byte)
  */
 #include "uavcan.h"
 #include "uavcan_crc.h"

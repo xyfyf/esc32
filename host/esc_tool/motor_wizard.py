@@ -1,4 +1,4 @@
-"""电机识别向导：KV / 极对数 / R-L 估算"""
+"""Motor identification wizard: estimates KV / pole pairs / R-L."""
 from __future__ import annotations
 
 from PyQt6.QtWidgets import (
@@ -80,6 +80,6 @@ class MotorWizardWidget(QWidget):
             c.set_param("motor_lq", 42.0)
             c.set_param("motor_rs", 21.6)
             c.save_params()
-            QMessageBox.information(self, "完成", "电机参数已写入")
+            QMessageBox.information(self, "完成", "Motor参数已写入")
         except Exception as e:
             QMessageBox.critical(self, "失败", str(e))

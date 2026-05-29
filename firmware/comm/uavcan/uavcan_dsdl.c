@@ -9,7 +9,7 @@ static uint16_t float16_pack(float v)
     if (v <= 0.0f) {
         return 0;
     }
-    /* 简化：线性映射到 0..65500，真机可换 IEEE754 half */
+    /* Simplified: linear map to 0..65500; replace with IEEE754 half on target */
     float s = v * 1000.0f;
     if (s > 65500.0f) {
         s = 65500.0f;

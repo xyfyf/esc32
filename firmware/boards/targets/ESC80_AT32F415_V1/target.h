@@ -1,5 +1,5 @@
 /**
- * Target: ESC-80 + AT32F415（成本档 / 中小 ESC）
+ * Target: ESC-80 + AT32F415 (cost variant / mid-small ESC)
  */
 #ifndef ESC_TARGET_ESC80_AT32F415_H
 #define ESC_TARGET_ESC80_AT32F415_H

@@ -1,6 +1,6 @@
 {
   "config_name": "ESC-60",
-  "description": "轻载 5-8kg 单轴",
+  "description": "Light load, 5-8 kg per arm",
   "motor_kv": 230,
   "motor_pole_pairs": 14,
   "motor_ld_uh": 22.0,

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Merge all project .md files into docs/esc32-完整文档.md
+"""Merge all project .md files into the consolidated documentation file.
 
-注意：分散的 .md 已合并删除后，请直接编辑 docs/esc32-完整文档.md；
-勿重复运行本脚本（会覆盖合订本）。仅当恢复多文件文档后再合并。
+Note: once the per-section .md files have been merged and removed, edit the
+consolidated documents (`docs/esc32-完整文档.md` and `docs/esc32-full-document-en.md`)
+directly. Do not re-run this script unless the per-section files are restored,
+otherwise it will overwrite the merged doc.
 """
 from pathlib import Path
 
@@ -59,10 +61,9 @@ def collect_all_md() -> list[Path]:
 def main() -> None:
     all_md = collect_all_md()
     ordered: list[Path] = []
-    seen = set()
+    seen: set[Path] = set()
 
     for rel in ORDER:
-        p = ROOT / rel.replace("/", "\\") if "\\" in str(ROOT) else ROOT / rel
         p = ROOT / rel
         if p.exists() and p not in seen:
             ordered.append(p)
@@ -74,31 +75,31 @@ def main() -> None:
             seen.add(p)
 
     parts = [
-        "# esc32 完整文档\n",
-        "> 由仓库内全部 Markdown 自动合并生成。源文件仍保留在各目录，"
-        "以 `scripts/merge-md.py` 重新生成。\n",
-        f"> 生成时间：自动合并 · 共 **{len(ordered)}** 个源文件\n",
-        "## 目录\n",
+        "# esc32 Complete Documentation\n",
+        "> Auto-merged from every Markdown file in the repository. The source\n"
+        "> files remain in place under their original directories and can be\n"
+        "> regenerated with `scripts/merge-md.py`.\n",
+        f"> Generated: auto-merge \u00b7 **{len(ordered)}** source files\n",
+        "## Table of Contents\n",
     ]
 
     for i, p in enumerate(ordered, 1):
         rel = p.relative_to(ROOT).as_posix()
         anchor = rel.replace("/", "-").replace(".", "").replace(" ", "-")
-        title = rel
-        parts.append(f"{i}. [{title}](#{anchor})\n")
+        parts.append(f"{i}. [{rel}](#{anchor})\n")
 
     parts.append("\n" + SEP)
 
     for p in ordered:
         rel = p.relative_to(ROOT).as_posix()
         text = p.read_text(encoding="utf-8")
-        # Demote top-level # to ## to avoid breaking doc structure
+        # Demote top-level # to ## so that the merged doc keeps a single H1.
         lines = text.splitlines()
         if lines and lines[0].startswith("# "):
             lines[0] = "## " + lines[0][2:]
         body = "\n".join(lines)
-        parts.append(f"<!-- 源文件: {rel} -->\n\n")
-        parts.append(f"## 文档：{rel}\n\n")
+        parts.append(f"<!-- Source: {rel} -->\n\n")
+        parts.append(f"## Document: {rel}\n\n")
         parts.append(body.strip())
         parts.append(SEP)
 

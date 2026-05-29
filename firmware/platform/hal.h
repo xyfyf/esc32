@@ -25,7 +25,7 @@ void hal_can_init(uint32_t baudrate);
 int hal_can_send(uint32_t can_id, const uint8_t *data, uint8_t len);
 int hal_can_receive(uint32_t *can_id, uint8_t *data, uint8_t *len, uint8_t cap);
 
-/* NVM：仿真写文件，目标 MCU 写 Flash */
+/* NVM: simulation writes to a file; target MCU writes to internal Flash */
 int hal_nvm_read(uint32_t offset, void *buf, size_t len);
 int hal_nvm_write(uint32_t offset, const void *buf, size_t len);
 

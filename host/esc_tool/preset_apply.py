@@ -1,4 +1,4 @@
-"""将 shared/defaults/*.json 预设写入已连接的 ESC"""
+"""Push a shared/defaults/*.json preset to the connected ESC."""
 from __future__ import annotations
 
 import argparse
@@ -9,7 +9,7 @@ from pathlib import Path
 from .client import EscClient
 from .transport import SerialTransport, UdpTransport
 
-# JSON 键 -> 固件参数名
+# JSON key -> firmware parameter name
 KEY_MAP = {
     "motor_kv": "motor_kv",
     "motor_pole_pairs": "motor_pole_pairs",

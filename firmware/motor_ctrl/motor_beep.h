@@ -1,6 +1,6 @@
 /**
  * @file motor_beep.h
- * @brief 电机线圈发声：上电旋律 / 联机旋律 / 信号丢失「滴滴」
+ * @brief Motor winding audio: boot melody / link melody / signal-loss beeps
  */
 #ifndef ESC_MOTOR_BEEP_H
 #define ESC_MOTOR_BEEP_H

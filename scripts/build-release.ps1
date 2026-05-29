@@ -1,13 +1,13 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  生成可双击运行的发布目录 dist\esc32\
+  Build the double-clickable release directory dist\esc32\.
 
-  包含：
-    esc32_sim.exe     仿真固件
-    esc_tool.exe      上位机 GUI
-    esc32_start.exe   一键启动（仿真 + GUI）
-    defaults\         参数预设 60/80/120/200.json
+  Contents:
+    esc32_sim.exe     Simulation firmware
+    esc_tool.exe      Host GUI
+    esc32_start.exe   One-click launcher (sim + GUI)
+    defaults\         Parameter presets 60/80/120/200.json
 #>
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
@@ -46,7 +46,7 @@ Write-Host "=== [3/4] Package esc_tool.exe / esc32_start.exe ===" -ForegroundCol
     --distpath $Dist --workpath $Build --specpath $Build `
     "..\scripts\esc32_start.py"
 
-# 清理 onedir 残留
+# Clean up PyInstaller onedir leftovers
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue `
     (Join-Path $Dist "esc_tool"), (Join-Path $Dist "esc32_start")
 
@@ -60,16 +60,16 @@ New-Item -ItemType Directory -Force -Path $defOut | Out-Null
 Copy-Item -Force "$Root\shared\defaults\*.json" $defOut
 
 $readme = @"
-esc32 发布包（双击运行）
+esc32 release package (double-click to run)
 
-  esc32_start.exe   推荐：一键启动仿真 + 上位机
-  esc32_sim.exe     仅仿真固件（UDP 7777/7779）
-  esc_tool.exe      仅上位机（连接 127.0.0.1:7777）
-  defaults\         参数预设 60/80/120/200.json
+  esc32_start.exe   Recommended: one-click launch (sim + host)
+  esc32_sim.exe     Simulation firmware only (UDP 7777/7779)
+  esc_tool.exe      Host GUI only (connects to 127.0.0.1:7777)
+  defaults\         Parameter presets 60/80/120/200.json
 
-首次在本机生成：powershell -File scripts\build-release.ps1
+To rebuild on this machine: powershell -File scripts\build-release.ps1
 "@
-Set-Content -Path (Join-Path $Dist "使用说明.txt") -Value $readme -Encoding UTF8
+Set-Content -Path (Join-Path $Dist "README.txt") -Value $readme -Encoding UTF8
 
 Write-Host ""
 Write-Host "OK: $Dist" -ForegroundColor Green

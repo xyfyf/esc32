@@ -1,6 +1,6 @@
 /**
  * @file motor_beep.c
- * @brief 固定电角度 + 音频频率调制三相占空比（无 FOC 运行）
+ * @brief Fixed electrical angle + audio-frequency three-phase duty modulation (no FOC)
  */
 #include "motor_beep.h"
 #include <math.h>
@@ -19,7 +19,7 @@ typedef struct {
     uint16_t duration_ms;
 } beep_note_t;
 
-/* 完整上电/联机旋律（三音上行，常见电调风格） */
+/* Full boot/link melody (three-note ascending, typical ESC style) */
 static const beep_note_t s_melody_full[] = {
     { 523.25f, 120 }, /* C5 */
     { 659.25f, 120 }, /* E5 */
@@ -27,7 +27,7 @@ static const beep_note_t s_melody_full[] = {
 };
 #define MELODY_FULL_COUNT (sizeof(s_melody_full) / sizeof(s_melody_full[0]))
 
-/* 丢失报警：短-停-短 */
+/* Loss alarm: short-pause-short */
 static const beep_note_t s_alarm_pair[] = {
     { 880.0f, 80 },
     { 0.0f,   60 },
@@ -227,7 +227,7 @@ void motor_beep_fast_loop(const esc_params_t *p, float dt,
     *duty_c = 0.5f + sinf(s_beep.phase + 2.0943951f) * amp;
 }
 
-/* 由 app 慢环调用：推进音符与报警周期 */
+/* Called from app slow loop: advance notes and alarm cycle */
 void motor_beep_tick_1ms(const esc_params_t *p, uint32_t dt_ms)
 {
     if (!motor_beep_enabled(p)) {

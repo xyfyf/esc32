@@ -1,11 +1,11 @@
 /**
  * @file pinmap.h
- * @brief ESC-60 + STM32G431CBU6 引脚规划（与 G474 同系，封装更小）
+ * @brief ESC-60 + STM32G431CBU6 pin plan (same family as G474, smaller package)
  */
 #ifndef ESC_STM32G431_PINMAP_H
 #define ESC_STM32G431_PINMAP_H
 
-/* TIM1 三相 PWM */
+/* TIM1 three-phase PWM */
 #define PIN_PWM_UH      GPIOA, 8
 #define PIN_PWM_UL      GPIOA, 7
 #define PIN_PWM_VH      GPIOB, 0
@@ -13,7 +13,7 @@
 #define PIN_PWM_WH      GPIOB, 4
 #define PIN_PWM_WL      GPIOB, 5
 
-/* ADC + 运放（G431 内置 OPAMP，具体通道以 CubeMX 为准） */
+/* ADC + op-amp (G431 has internal OPAMP; final channel mapping per CubeMX project) */
 #define PIN_ADC_IU      GPIOA, 0
 #define PIN_ADC_IV      GPIOA, 1
 #define PIN_ADC_VBUS    GPIOA, 2

@@ -85,7 +85,7 @@ static void motor_run_speed_pi(esc_motor_t *m, const esc_params_t *params, float
     m->iq_ref_a = clampf(m->iq_ref_a, -imax, imax);
 
     if (params->field_weakening_enable && m->rpm_meas > params->motor_max_rpm * 0.85f) {
-        /* 弱磁：高速时允许略增 Iq 上限 */
+        /* Field weakening: allow a small Iq headroom at high speed */
         m->iq_ref_a *= 1.05f;
     }
 }
@@ -146,7 +146,7 @@ void motor_fast_loop(esc_motor_t *m, const esc_params_t *params, float dt)
         m->foc_st.omega_elec = m->observer.omega;
     }
 
-    /* 仿真电机模型 */
+    /* Simulated motor model */
     float iq_act = m->iq_ref_a * 0.85f;
     m->foc_st.ia = iq_act * sinf(m->foc_st.theta_elec);
     m->foc_st.ib = iq_act * sinf(m->foc_st.theta_elec - 2.0943951f);

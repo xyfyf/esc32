@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  加载 esc32 开发环境 PATH（当前 PowerShell 会话有效）
+  Load the esc32 development PATH for the current PowerShell session.
 
 .USAGE
   . .\scripts\env.ps1
@@ -53,7 +53,7 @@ function Find-ArmGccBin {
     return $null
 }
 
-# MinGW（仿真固件）
+# MinGW (for simulation firmware)
 $gccDir = Find-MsysGcc
 if (-not $gccDir) { $gccDir = Find-WinLibsBin }
 if ($gccDir) { Add-PathIfExists $gccDir }
@@ -63,7 +63,7 @@ foreach ($cp in @("$env:ProgramFiles\CMake\bin", "${env:ProgramFiles(x86)}\CMake
     if (Test-Path $cp) { Add-PathIfExists $cp; break }
 }
 
-# ARM GCC（真机，可选）
+# ARM GCC (optional, for real hardware)
 $armBin = Find-ArmGccBin
 if ($armBin) {
     Add-PathIfExists $armBin

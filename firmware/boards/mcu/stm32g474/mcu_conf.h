@@ -1,6 +1,6 @@
 /**
  * @file mcu_conf.h
- * @brief STM32G474 — ESC-80 首版真机
+ * @brief STM32G474 — ESC-80 first production target
  */
 #ifndef ESC_STM32G474_MCU_CONF_H
 #define ESC_STM32G474_MCU_CONF_H

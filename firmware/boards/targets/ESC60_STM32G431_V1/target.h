@@ -1,5 +1,5 @@
 /**
- * Target: ESC-60 + STM32G431（规划）
+ * Target: ESC-60 + STM32G431 (planned)
  */
 #ifndef ESC_TARGET_ESC60_G431_H
 #define ESC_TARGET_ESC60_G431_H

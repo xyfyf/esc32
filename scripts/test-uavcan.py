@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""向 esc32_sim 发送 DroneCAN RawCommand（UDP :7779）。"""
+"""Send a DroneCAN RawCommand to esc32_sim over UDP :7779."""
 from __future__ import annotations
 
 import socket

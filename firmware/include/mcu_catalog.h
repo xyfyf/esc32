@@ -1,16 +1,16 @@
 /**
  * @file mcu_catalog.h
- * @brief MCU 族目录（对齐行业常见 ESC 可编程 MCU 谱系 + FOC 扩展档）
+ * @brief MCU family catalog (common 32-bit ESC MCUs + FOC extension tiers)
  *
- * 族 ID 高字节 = 厂商，低字节 = 系列序号，便于上位机筛选与 OTA 分包。
- * 新增 MCU：在本表登记 → 建 boards/mcu/<family>/ → 建 boards/targets/<TARGET>/。
+ * Family ID: high byte = vendor, low byte = series index; used by host filtering and OTA packaging.
+ * New MCU: register here -> boards/mcu/<family>/ -> boards/targets/<TARGET>/.
  */
 #ifndef ESC_MCU_CATALOG_H
 #define ESC_MCU_CATALOG_H
 
 #include <stdint.h>
 
-/* 厂商域 */
+/* Vendor domain */
 #define ESC_MCU_VENDOR_SIM    0x00u
 #define ESC_MCU_VENDOR_ST     0x10u
 #define ESC_MCU_VENDOR_GD     0x20u
@@ -19,27 +19,27 @@
 
 #define ESC_MCU_ID(vendor, idx) ((uint8_t)((vendor) | ((idx) & 0x0Fu)))
 
-/* --- 仿真 --- */
+/* --- Simulation --- */
 #define ESC_MCU_SIM           ESC_MCU_ID(ESC_MCU_VENDOR_SIM, 0)
 
-/* --- ST：与常见 32 位 ESC 同谱系 --- */
-#define ESC_MCU_STSPIN32F0    ESC_MCU_ID(ESC_MCU_VENDOR_ST, 0)  /* 集成预驱 */
+/* --- ST: same family as mainstream 32-bit ESCs --- */
+#define ESC_MCU_STSPIN32F0    ESC_MCU_ID(ESC_MCU_VENDOR_ST, 0)  /* integrated predriver */
 #define ESC_MCU_STM32F051     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 1)
 #define ESC_MCU_STM32G071     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 2)
-#define ESC_MCU_STM32G431     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 3)  /* ESC-60，G4 同系优先移植 */
-#define ESC_MCU_STM32G474     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 4)  /* ESC-80 首版 */
-#define ESC_MCU_STM32H743     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 5)  /* 大功率档 */
+#define ESC_MCU_STM32G431     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 3)  /* ESC-60, G4 series priority port */
+#define ESC_MCU_STM32G474     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 4)  /* ESC-80 first production target */
+#define ESC_MCU_STM32H743     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 5)  /* high-power tier */
 
 /* --- GD --- */
 #define ESC_MCU_GD32E230      ESC_MCU_ID(ESC_MCU_VENDOR_GD, 0)
 #define ESC_MCU_GD32F303      ESC_MCU_ID(ESC_MCU_VENDOR_GD, 1)
 
 /* --- Artery AT32 --- */
-#define ESC_MCU_AT32F415      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 0)  /* 中小 ESC，独立 HAL */
+#define ESC_MCU_AT32F415      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 0)  /* mid/small ESC, dedicated HAL */
 #define ESC_MCU_AT32F421      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 1)
 #define ESC_MCU_AT32F435      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 2)
 
-/* --- 沁泉 CKS（不推荐量产，仅兼容登记） --- */
+/* --- CKS/WCH (not for production; compatibility register only) --- */
 #define ESC_MCU_CKS32F051     ESC_MCU_ID(ESC_MCU_VENDOR_WCH, 0)
 
 #ifndef ESC_MCU_ID_BUILD

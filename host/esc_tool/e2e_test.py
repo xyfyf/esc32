@@ -1,4 +1,4 @@
-"""端到端闭环自检：需先启动 firmware/esc32_sim.exe"""
+"""Closed-loop end-to-end self-test (requires firmware/esc32_sim.exe to be running)."""
 from __future__ import annotations
 
 import struct
@@ -65,7 +65,7 @@ def run_e2e(host: str = "127.0.0.1", port: int = 7777) -> int:
         c.disarm()
         c.set_throttle_us(1000)
 
-        # OTA 小镜像
+        # OTA: small image
         img = bytes([0xEC, 0x32, 0x01, 0x02, 0x03] * 20)
         c.fw_erase()
         c.fw_write(0, img[:64])

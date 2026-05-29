@@ -1,6 +1,6 @@
 /**
  * @file uavcan_crc.c
- * @brief UAVCAN 传输 CRC-16-CCITT-FALSE
+ * @brief UAVCAN transfer CRC-16-CCITT-FALSE
  */
 #include "uavcan_crc.h"
 

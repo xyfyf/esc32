@@ -51,7 +51,7 @@ void foc_svpwm(const float v_alpha, const float v_beta, const float vbus,
     float vb = v_beta / vbus;
     float v0 = 0.5f * (sqrtf(va * va + vb * vb));
     (void)v0;
-    /* 简化 SVPWM：逆 Park 后占空比限幅（P0）；后续换扇区 SVPWM */
+    /* Simplified SVPWM: inverse Park then duty clamp (P0); replace with sector-based SVPWM later */
     *da = ESC_CLAMP(0.5f + va * 0.5f, 0.0f, 1.0f);
     *db = ESC_CLAMP(0.5f + (-0.5f * va + 0.8660254f * vb) * 0.5f, 0.0f, 1.0f);
     *dc = ESC_CLAMP(0.5f + (-0.5f * va - 0.8660254f * vb) * 0.5f, 0.0f, 1.0f);

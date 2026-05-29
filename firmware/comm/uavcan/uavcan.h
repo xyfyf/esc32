@@ -1,6 +1,6 @@
 /**
  * @file uavcan.h
- * @brief UAVCAN v0 传输层 + DSDL 编解码（DroneCAN 兼容子集）
+ * @brief UAVCAN v0 transport layer + DSDL codec (DroneCAN-compatible subset)
  */
 #ifndef ESC_UAVCAN_H
 #define ESC_UAVCAN_H

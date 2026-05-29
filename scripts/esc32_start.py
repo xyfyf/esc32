@@ -1,4 +1,4 @@
-"""一键启动：仿真固件 + 上位机 GUI（打包为 esc32_start.exe 后双击即可）"""
+"""One-click launcher: simulation firmware + host GUI (packaged as esc32_start.exe)."""
 from __future__ import annotations
 
 import os
@@ -20,12 +20,12 @@ def main() -> None:
     tool = base / "esc_tool.exe"
 
     if not sim.is_file():
-        _msg(f"未找到仿真固件：\n{sim}\n\n请先运行 scripts\\build-release.ps1 生成发布包。")
+        _msg(f"Simulation firmware not found:\n{sim}\n\nRun scripts\\build-release.ps1 first to build the release package.")
         sys.exit(1)
 
     flags = 0
     if os.name == "nt":
-        flags = subprocess.CREATE_NEW_CONSOLE  # 保留仿真器控制台输出
+        flags = subprocess.CREATE_NEW_CONSOLE  # keep the simulator's console output visible
 
     subprocess.Popen([str(sim)], cwd=str(base), creationflags=flags)
 
@@ -41,7 +41,7 @@ def main() -> None:
                 cwd=str(base.parent / "host"),
             )
         else:
-            _msg(f"未找到 esc_tool.exe，且开发环境不可用。\n请运行 build-release.ps1。")
+            _msg("esc_tool.exe not found and the development environment is unavailable.\nRun build-release.ps1.")
             sys.exit(1)
 
 

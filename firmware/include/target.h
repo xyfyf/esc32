@@ -1,6 +1,6 @@
 /**
  * @file target.h
- * @brief 由 ESC_TARGET 编译宏选择 boards/targets/<name>/target.h
+ * @brief Selects boards/targets/<name>/target.h via ESC_TARGET build macro
  */
 #ifndef ESC_TARGET_H
 #define ESC_TARGET_H
@@ -22,7 +22,7 @@
 #include "../boards/targets/ESC_SIM/target.h"
 #endif
 
-/* MCU 能力宏（供 platform/mcu_port.c，对标 VESC hw_*.h） */
+/* MCU capability macros (consumed by platform/mcu_port.c; VESC hw_*.h style) */
 #if defined(ESC_TARGET_ESC60_STM32G431_V1)
 #include "../boards/mcu/stm32g431/mcu_conf.h"
 #elif defined(ESC_TARGET_ESC80_STM32G474_V1)

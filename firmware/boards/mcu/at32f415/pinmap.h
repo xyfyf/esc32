@@ -1,6 +1,6 @@
 /**
  * @file pinmap.h
- * @brief ESC-80 成本档 + AT32F415（引脚待原理图定稿）
+ * @brief ESC-80 cost variant + AT32F415 (pin assignment pending schematic finalization)
  */
 #ifndef ESC_AT32F415_PINMAP_H
 #define ESC_AT32F415_PINMAP_H

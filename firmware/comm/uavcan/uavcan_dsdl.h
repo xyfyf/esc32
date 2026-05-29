@@ -1,6 +1,6 @@
 /**
  * @file uavcan_dsdl.h
- * @brief DSDL 消息 ID 与 equipment.esc / protocol 编解码
+ * @brief DSDL message IDs and equipment.esc / protocol codecs
  */
 #ifndef ESC_UAVCAN_DSDL_H
 #define ESC_UAVCAN_DSDL_H

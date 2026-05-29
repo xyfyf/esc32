@@ -1,6 +1,6 @@
 /**
  * @file params.h
- * @brief 电调参数块（电机 / FOC / 保护 / 通信）
+ * @brief ESC parameter block (motor / FOC / protection / comm)
  */
 #ifndef ESC_PARAMS_H
 #define ESC_PARAMS_H
@@ -22,7 +22,7 @@ typedef struct {
     char config_name[ESC_CONFIG_NAME_LEN];
     char device_name[ESC_DEVICE_NAME_LEN];
 
-    /* 电机 */
+    /* Motor */
     uint16_t motor_kv;
     uint16_t motor_pole_pairs;
     float    motor_ld_uh;
@@ -31,7 +31,7 @@ typedef struct {
     float    motor_max_current_a;
     uint32_t motor_max_rpm;
 
-    /* 观测器 / FOC */
+    /* Observer / FOC */
     uint8_t  observer_type;
     float    observer_coef;
     float    observer_filter_freq_hz;
@@ -41,7 +41,7 @@ typedef struct {
     float    field_weakening_max_current_a;
     float    ls_coef;
 
-    /* 速度环 */
+    /* Speed loop */
     float s_speed_loop_kp;
     float s_speed_loop_ki;
     float f_speed_loop_kp;
@@ -50,14 +50,14 @@ typedef struct {
     uint8_t speed_loop_anti_windup_enable;
     float   speed_loop_anti_windup_coef;
 
-    /* 位置环（预留） */
+    /* Position loop (reserved) */
     float position_loop_kp;
     float position_loop_ki;
     float position_loop_kd;
     float position_loop_pid_limit_1;
     float position_loop_pid_limit_2;
 
-    /* 油门 / PWM */
+    /* Throttle / PWM */
     uint8_t  throttle_type;
     uint8_t  ctrl_input_type;
     uint16_t normal_pwm_start_us;
@@ -73,7 +73,7 @@ typedef struct {
     uint8_t  ppm_curve_type;
     uint16_t hyst_ppm;
 
-    /* 加减速 */
+    /* Accel / decel */
     float max_acc_krpmps;
     float max_dec_krpmps;
     float max_accel_current_a;
@@ -84,13 +84,13 @@ typedef struct {
     float min_startup_speed;
     uint8_t min_startup_speed_enable;
 
-    /* 功率 / 电流限制 */
+    /* Power / current limits */
     float ibus_max_current_a;
     uint16_t ibus_limit_duration_ms;
     float power_limit_w;
     float max_power_limit_w;
 
-    /* 保护 */
+    /* Protection */
     uint8_t low_voltage_protect_enable;
     float   low_protect_voltage_ratio;
     float   vbus_lower_limit_v;
@@ -117,7 +117,7 @@ typedef struct {
     uint16_t stall_protected_duration_ms;
     uint8_t stall_recover_enable;
 
-    /* 通信 */
+    /* Communication */
     uint8_t  node_id;
     uint8_t  esc_index;
     uint32_t can_baudrate;
@@ -128,17 +128,17 @@ typedef struct {
     uint16_t status3_period_ms;
     uint16_t status4_period_ms;
 
-    /* 滤波 */
+    /* Filtering */
     float dcbus_lpf_hz;
 
-    /* 曲线 21 点 */
+    /* 21-point curve */
     int16_t custom_positive_speed_curve[ESC_CURVE_POINTS];
     int16_t custom_negative_speed_curve[ESC_CURVE_POINTS];
     int16_t normal_custom_speed_curve[ESC_CURVE_POINTS];
     int16_t normal_custom_acc_curve[ESC_CURVE_POINTS];
     int16_t normal_custom_dec_curve[ESC_CURVE_POINTS];
 
-    /* 其它 */
+    /* Misc */
     uint8_t stop_type;
     uint8_t acc_type;
     uint8_t acc_comp_enable;
@@ -177,7 +177,7 @@ uint16_t params_crc(const esc_params_t *p);
 bool params_load_flash(esc_params_t *p);
 bool params_save_flash(const esc_params_t *p);
 
-/** 参数描述符：上位机按 index 读写 */
+/** Parameter descriptors: host read/write by index */
 typedef enum {
     ESC_PARAM_TYPE_U8 = 0,
     ESC_PARAM_TYPE_U16,
