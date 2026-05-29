@@ -189,9 +189,15 @@ esc32_ESC200_STM32H743_V1.arm.elf: $(CORE_SRCS) boards/mcu/stm32h743/hal_stub.c 
 arm-verify: arm-target60 arm-target80 arm-target415 arm-target120 arm-target200
 	@echo All ARM firmware artifacts built OK
 
+# Cross-shell clean. The cmd /c wrapper makes `del` work the same whether
+# make's spawned shell is cmd.exe (default on native Windows) or sh.exe
+# (msys / git-bash). Files locked by a running process (typically
+# esc32_sim.exe) are reported and skipped — kill the process first if you
+# need a true clean rebuild.
 clean:
 ifeq ($(OS),Windows_NT)
-	-del /Q esc32_sim.exe esc32_*.elf esc32_*.arm.elf esc32_*.bin esc32_*.hex esc32_*.map esc32_nvm.bin 2>nul
+	-cmd /c "taskkill /F /IM esc32_sim.exe >nul 2>&1 & del /Q esc32_sim.exe esc32_*.elf esc32_*.arm.elf esc32_*.bin esc32_*.hex esc32_*.map esc32_nvm.bin >nul 2>&1"
+	@echo clean done.
 else
 	-$(RM) esc32_sim.exe esc32_*.elf esc32_*.arm.elf esc32_*.bin esc32_*.hex esc32_*.map esc32_nvm.bin
 endif
