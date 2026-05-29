@@ -1,0 +1,33 @@
+name: esc32-ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  firmware-sim:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install WinLibs
+        run: winget install BrechtSanders.WinLibs.POSIX.UCRT -e --accept-package-agreements --accept-source-agreements
+      - name: Build
+        shell: pwsh
+        run: |
+          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+          cd firmware
+          mingw32-make
+      - name: E2E
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File scripts/run-closed-loop.ps1
+
+  host:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r host/requirements.txt
+      - run: python -m py_compile host/esc_tool/*.py

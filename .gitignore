@@ -1,0 +1,41 @@
+# Build
+**/build/
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/dist/
+dist/esc32/
+host/build_pyinstaller/
+**/*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Firmware artifacts
+**/*.elf
+**/*.hex
+**/*.map
+firmware/*.exe
+firmware/out.txt
+firmware/err.txt
+firmware/sim.log
+firmware/sim_out.txt
+firmware/sim_err.txt
+firmware/build_err.txt
+firmware/build_log.txt
+firmware/err_out.txt
+**/*.o
+
+# Host
+host/.esc_history
+
+# Sim NVM / runtime
+**/*.bin
+!shared/**/*.json
+
+# OS
+Thumbs.db
+.DS_Store

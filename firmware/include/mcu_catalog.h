@@ -1,0 +1,55 @@
+/**
+ * @file mcu_catalog.h
+ * @brief MCU 族目录（对齐行业常见 ESC 可编程 MCU 谱系 + FOC 扩展档）
+ *
+ * 族 ID 高字节 = 厂商，低字节 = 系列序号，便于上位机筛选与 OTA 分包。
+ * 新增 MCU：在本表登记 → 建 boards/mcu/<family>/ → 建 boards/targets/<TARGET>/。
+ */
+#ifndef ESC_MCU_CATALOG_H
+#define ESC_MCU_CATALOG_H
+
+#include <stdint.h>
+
+/* 厂商域 */
+#define ESC_MCU_VENDOR_SIM    0x00u
+#define ESC_MCU_VENDOR_ST     0x10u
+#define ESC_MCU_VENDOR_GD     0x20u
+#define ESC_MCU_VENDOR_AT     0x30u
+#define ESC_MCU_VENDOR_WCH    0x40u
+
+#define ESC_MCU_ID(vendor, idx) ((uint8_t)((vendor) | ((idx) & 0x0Fu)))
+
+/* --- 仿真 --- */
+#define ESC_MCU_SIM           ESC_MCU_ID(ESC_MCU_VENDOR_SIM, 0)
+
+/* --- ST：与常见 32 位 ESC 同谱系 --- */
+#define ESC_MCU_STSPIN32F0    ESC_MCU_ID(ESC_MCU_VENDOR_ST, 0)  /* 集成预驱 */
+#define ESC_MCU_STM32F051     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 1)
+#define ESC_MCU_STM32G071     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 2)
+#define ESC_MCU_STM32G431     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 3)  /* ESC-60，G4 同系优先移植 */
+#define ESC_MCU_STM32G474     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 4)  /* ESC-80 首版 */
+#define ESC_MCU_STM32H743     ESC_MCU_ID(ESC_MCU_VENDOR_ST, 5)  /* 大功率档 */
+
+/* --- GD --- */
+#define ESC_MCU_GD32E230      ESC_MCU_ID(ESC_MCU_VENDOR_GD, 0)
+#define ESC_MCU_GD32F303      ESC_MCU_ID(ESC_MCU_VENDOR_GD, 1)
+
+/* --- Artery AT32 --- */
+#define ESC_MCU_AT32F415      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 0)  /* 中小 ESC，独立 HAL */
+#define ESC_MCU_AT32F421      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 1)
+#define ESC_MCU_AT32F435      ESC_MCU_ID(ESC_MCU_VENDOR_AT, 2)
+
+/* --- 沁泉 CKS（不推荐量产，仅兼容登记） --- */
+#define ESC_MCU_CKS32F051     ESC_MCU_ID(ESC_MCU_VENDOR_WCH, 0)
+
+#ifndef ESC_MCU_ID_BUILD
+#ifdef ESC_PLATFORM_SIM
+#define ESC_MCU_ID_BUILD ESC_MCU_SIM
+#else
+#define ESC_MCU_ID_BUILD ESC_MCU_STM32G474
+#endif
+#endif
+
+const char *esc_mcu_id_to_string(uint8_t mcu_id);
+
+#endif

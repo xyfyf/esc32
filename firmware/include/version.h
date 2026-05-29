@@ -1,0 +1,12 @@
+#ifndef ESC_VERSION_H
+#define ESC_VERSION_H
+
+#define ESC_FW_VERSION_MAJOR  0
+#define ESC_FW_VERSION_MINOR  1
+#define ESC_FW_VERSION_PATCH  0
+#define ESC_FW_PROTO_VERSION  3
+
+#define ESC_FW_VERSION_U16 \
+    ((uint16_t)((ESC_FW_VERSION_MAJOR << 8) | ESC_FW_VERSION_MINOR))
+
+#endif

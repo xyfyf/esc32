@@ -1,0 +1,19 @@
+{
+  "config_name": "ESC-120",
+  "description": "超重载 25kg+ 单轴",
+  "motor_kv": 120,
+  "motor_pole_pairs": 28,
+  "motor_ld_uh": 24.0,
+  "motor_lq_uh": 36.0,
+  "motor_rs_mohm": 12.0,
+  "motor_max_current_a": 120,
+  "motor_max_rpm": 4500,
+  "observer_type": 1,
+  "ibus_max_current_a": 100,
+  "power_limit_w": 4500,
+  "normal_pwm_start_us": 1050,
+  "normal_pwm_end_us": 1950,
+  "node_id": 40,
+  "motor_sound_enable": 1,
+  "motor_sound_volume": 8
+}

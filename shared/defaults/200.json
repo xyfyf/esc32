@@ -1,0 +1,19 @@
+{
+  "config_name": "ESC-200",
+  "description": "特重载 35kg 级单轴",
+  "motor_kv": 90,
+  "motor_pole_pairs": 32,
+  "motor_ld_uh": 18.0,
+  "motor_lq_uh": 28.0,
+  "motor_rs_mohm": 8.5,
+  "motor_max_current_a": 200,
+  "motor_max_rpm": 3500,
+  "observer_type": 1,
+  "ibus_max_current_a": 200,
+  "power_limit_w": 8000,
+  "normal_pwm_start_us": 1050,
+  "normal_pwm_end_us": 1950,
+  "node_id": 50,
+  "motor_sound_enable": 1,
+  "motor_sound_volume": 8
+}
