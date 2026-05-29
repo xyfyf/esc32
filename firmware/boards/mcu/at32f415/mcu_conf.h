@@ -14,4 +14,9 @@
 #define ESC_MCU_PWM_FREQ_KHZ_MAX    40.0f
 #define ESC_MCU_PORT_STATUS         "stub"
 
+/* AT32F415CB has 32 KiB SRAM — keep the OTA staging buffer small. */
+#ifndef ESC_BOOT_IMAGE_BUF_SIZE
+#define ESC_BOOT_IMAGE_BUF_SIZE (8u * 1024u)
+#endif
+
 #endif

@@ -11,4 +11,9 @@
 #define ESC_MCU_RECOMMENDED_PRODUCT ESC_PRODUCT_ESC60
 #define ESC_MCU_PORT_STATUS         "stub"
 
+/* G431CB has only 32 KiB SRAM — keep the OTA staging buffer small. */
+#ifndef ESC_BOOT_IMAGE_BUF_SIZE
+#define ESC_BOOT_IMAGE_BUF_SIZE (8u * 1024u)
+#endif
+
 #endif

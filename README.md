@@ -9,7 +9,22 @@
 [![MCUs](https://img.shields.io/badge/MCUs-STM32%20G4%20%2F%20H7%20%E2%80%A2%20AT32-orange)]()
 [![Docs](https://img.shields.io/badge/docs-CN%20%2F%20EN-success)](docs/esc32-完整文档.md)
 
-> 中文 README · [English documentation](docs/esc32-full-document-en.md)
+> 中文 README · [English documentation](docs/esc32-full-document-en.md) · [📦 下载预编译固件](https://github.com/xyfyf/esc32/releases/latest)
+
+---
+
+## 📦 预编译固件 / Pre-built artifacts
+
+每次打 `v*.*` 标签后，GitHub Actions 会自动产出两个 zip 上传到对应 Release：
+
+| 资产 | 内容 |
+|------|------|
+| `esc32-vX.Y-sim.zip` | `esc32_sim.exe`（Windows 仿真固件）+ 60/80/120/200 参数预设 + 使用说明 |
+| `esc32-vX.Y-firmware.zip` | 5 个硬件 Target 的 `.elf` / `.bin` / `.hex` / `.map`（**未在真机验证**） |
+
+> ⚠️ **真机固件警告**：硬件 `.bin`/`.hex` 由 *最小 startup + stub HAL* 编出，链接通过且符合各 MCU 的内存预算，**但不会初始化外设**——烧到真板上会进 `Default_Handler` 死循环。仅用于工具链和烧录流程的冒烟验证，等生产 HAL 合并后再正式发布可用固件。
+
+下载页：[Releases](https://github.com/xyfyf/esc32/releases)
 
 ---
 
@@ -138,14 +153,22 @@ powershell -File scripts\build-release.ps1       # 生成 dist\esc32\
 ```powershell
 cd firmware
 mingw32-make list-targets
-mingw32-make esc80         # 仿真 + 产品 0x80
-mingw32-make esc200        # 仿真 + 产品 0x200
-mingw32-make target80      # G474 stub HAL 链接验证
-mingw32-make target80-hal  # G474 生产 HAL 骨架
-mingw32-make target60      # ESC-60 + G431
-mingw32-make target415     # ESC-80 + AT32F415
-mingw32-make target200     # ESC-200 + H743
-mingw32-make verify        # 一次性链接全部硬件 Target
+mingw32-make esc80             # 仿真 + 产品 0x80
+mingw32-make esc200            # 仿真 + 产品 0x200
+mingw32-make target80          # G474 stub HAL 链接验证（PC ELF）
+mingw32-make target80-hal      # G474 生产 HAL 骨架
+mingw32-make target60          # ESC-60 + G431（PC ELF）
+mingw32-make target415         # ESC-80 + AT32F415（PC ELF）
+mingw32-make target200         # ESC-200 + H743（PC ELF）
+mingw32-make verify            # 一次性链接全部硬件 Target
+
+# === 真 ARM 固件（arm-none-eabi-gcc）===
+mingw32-make arm-target80      # → esc32_ESC80_STM32G474_V1.{arm.elf,bin,hex}
+mingw32-make arm-target60      # → esc32_ESC60_STM32G431_V1.{arm.elf,bin,hex}
+mingw32-make arm-target415     # → esc32_ESC80_AT32F415_V1.{arm.elf,bin,hex}
+mingw32-make arm-target120     # → esc32_ESC120_STM32H743_V1.{arm.elf,bin,hex}
+mingw32-make arm-target200     # → esc32_ESC200_STM32H743_V1.{arm.elf,bin,hex}
+mingw32-make arm-verify        # 一次性产出 5 个硬件 Target 的真 ARM 固件
 ```
 
 ---
@@ -201,6 +224,7 @@ GUI 内提供 **电机识别向导**（KV / 极对数 / R-L 估算）与 **JSON 
 - ✅ **P1** 保护状态机 + 故障黑匣子 + Bootloader/OTA（仿真）
 - ✅ **P2** 多 Target 架构 + 电机提示音 + JSON 预设
 - ✅ **P3** UAVCAN DSDL 栈 + NodeStatus / GetNodeInfo + 多 MCU HAL 骨架
+- ✅ **P3.5** ARM 交叉编译路径 + GitHub Actions 自动发布（仿真 + 5 个硬件 Target 的 .elf/.bin/.hex）
 - ⏳ **P4** ESC-80 G474 真机点亮 + 实测调参（待硬件打样）
 - ⏳ **P5** Cyphal (UAVCAN v1) 可选支持 + ESC-120/200 大功率验证
 

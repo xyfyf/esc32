@@ -1,0 +1,158 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version label (defaults to git tag or v0.0.0-dev)'
+        required: false
+        default: 'v0.0.0-dev'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build firmware artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Determine version
+        id: ver
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            ver="${{ inputs.version }}"
+          elif [ -n "${{ github.ref_name }}" ] && [ "${{ github.ref_type }}" = "tag" ]; then
+            ver="${{ github.ref_name }}"
+          else
+            ver="v0.0.0-dev"
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "Building release: $ver"
+
+      - name: Install toolchains
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi \
+            gcc-mingw-w64-x86-64 \
+            zip
+          arm-none-eabi-gcc --version | head -n1
+          x86_64-w64-mingw32-gcc --version | head -n1
+
+      - name: Build sim firmware (Windows .exe via mingw cross)
+        working-directory: firmware
+        run: |
+          make CC=x86_64-w64-mingw32-gcc esc32_sim.exe
+          ls -la esc32_sim.exe
+
+      - name: Build ARM firmware (.elf / .bin / .hex)
+        working-directory: firmware
+        run: |
+          make arm-verify
+          ls -la esc32_*.arm.elf esc32_*.bin esc32_*.hex
+
+      - name: Stage sim package
+        run: |
+          ver="${{ steps.ver.outputs.version }}"
+          stage="dist/sim-stage"
+          mkdir -p "$stage/defaults"
+          cp firmware/esc32_sim.exe "$stage/"
+          cp shared/defaults/*.json "$stage/defaults/"
+          cat > "$stage/README.txt" <<EOF
+          esc32 simulation firmware (release $ver)
+          ========================================
+
+          Files
+            esc32_sim.exe     PC simulation firmware. Listens on UDP 7777
+                              (debug protocol) and UDP 7779 (DroneCAN).
+            defaults/         Parameter presets for ESC-60/80/120/200.
+
+          Quick start
+            1. Double-click esc32_sim.exe.
+            2. Connect with the host GUI/CLI on 127.0.0.1:7777.
+
+          Source: https://github.com/${{ github.repository }} (release $ver)
+          EOF
+
+      - name: Stage firmware package
+        run: |
+          ver="${{ steps.ver.outputs.version }}"
+          stage="dist/fw-stage"
+          mkdir -p "$stage"
+          cp firmware/esc32_*.arm.elf "$stage/"
+          cp firmware/esc32_*.bin    "$stage/"
+          cp firmware/esc32_*.hex    "$stage/"
+          cp firmware/esc32_*.map    "$stage/" 2>/dev/null || true
+          cat > "$stage/README.txt" <<EOF
+          esc32 hardware firmware (release $ver)
+          ======================================
+
+          Targets
+            ESC60_STM32G431_V1     128K F / 32K R   Cortex-M4F
+            ESC80_STM32G474_V1     512K F / 128K R  Cortex-M4F (first prod target)
+            ESC80_AT32F415_V1      256K F / 32K R   Cortex-M4 soft-float
+            ESC120_STM32H743_V1    2M F / 512K AXI  Cortex-M7F
+            ESC200_STM32H743_V1    2M F / 512K AXI  Cortex-M7F
+
+          WARNING - UNVERIFIED ON HARDWARE
+            These artifacts come from a minimal startup + stub HAL build.
+            They link cleanly and respect each MCU's memory map but DO NOT
+            initialise peripherals. On real silicon the firmware boots into
+            Default_Handler and stays there. Use only for link verification
+            and toolchain/flasher smoke tests until the production HAL is
+            merged.
+
+          Source: https://github.com/${{ github.repository }} (release $ver)
+          EOF
+
+      - name: Pack zips
+        run: |
+          ver="${{ steps.ver.outputs.version }}"
+          mkdir -p dist
+          (cd dist/sim-stage && zip -9 -r "../esc32-$ver-sim.zip" .)
+          (cd dist/fw-stage  && zip -9 -r "../esc32-$ver-firmware.zip" .)
+          ls -la dist/
+
+      - name: Upload artifacts (CI run)
+        uses: actions/upload-artifact@v4
+        with:
+          name: esc32-${{ steps.ver.outputs.version }}
+          path: |
+            dist/esc32-*-sim.zip
+            dist/esc32-*-firmware.zip
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: esc32 ${{ github.ref_name }}
+          body: |
+            ## esc32 ${{ github.ref_name }}
+
+            **Artifacts**
+
+            - `esc32-${{ github.ref_name }}-sim.zip` — PC simulation firmware (`esc32_sim.exe`) + parameter presets. Double-click to run.
+            - `esc32-${{ github.ref_name }}-firmware.zip` — ARM firmware (`.elf` / `.bin` / `.hex`) for ESC-60 / 80 / 120 / 200 hardware targets.
+
+            > ⚠️ The hardware firmware artifacts are produced from a minimal
+            > startup + stub HAL build and have **not** been validated on
+            > real silicon. They are intended for link verification and
+            > flasher smoke tests until the production HAL lands.
+
+            See [README](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md)
+            and [docs](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/docs/esc32-完整文档.md)
+            for usage details.
+          files: |
+            dist/esc32-*-sim.zip
+            dist/esc32-*-firmware.zip
+          fail_on_unmatched_files: true

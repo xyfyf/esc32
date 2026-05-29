@@ -1,10 +1,21 @@
 #include "boot.h"
+#include "target.h"
 #include "../../shared/protocol/protocol.h"
 #include "hal.h"
 #include <string.h>
 
+/*
+ * OTA staging buffer. Size is target-tunable so MCUs with tight SRAM
+ * (G431 / AT32F415 ≤ 32 KiB) can still link cleanly. The default of
+ * 64 KiB matches the simulation and G474/H743 builds; tight-RAM targets
+ * pre-define ESC_BOOT_IMAGE_BUF_SIZE in their mcu_conf.h.
+ */
+#ifndef ESC_BOOT_IMAGE_BUF_SIZE
+#define ESC_BOOT_IMAGE_BUF_SIZE (64u * 1024u)
+#endif
+
 static boot_state_t s_boot;
-static uint8_t s_image_buf[64 * 1024];
+static uint8_t s_image_buf[ESC_BOOT_IMAGE_BUF_SIZE];
 
 void boot_init(void)
 {
