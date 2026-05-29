@@ -1,4 +1,4 @@
-{
+﻿{
   "config_name": "ESC-80",
   "description": "Agricultural drone, ~17 kg per arm",
   "motor_kv": 170,
@@ -15,5 +15,5 @@
   "normal_pwm_end_us": 1950,
   "node_id": 30,
   "motor_sound_enable": 1,
-  "motor_sound_volume": 8,
+  "motor_sound_volume": 8
 }

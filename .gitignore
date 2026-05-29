@@ -39,3 +39,10 @@ host/.esc_history
 # OS
 Thumbs.db
 .DS_Store
+
+firmware/sim_stdout.txt
+firmware/sim_stderr.txt
+
+
+.git_commit_msg.txt
+

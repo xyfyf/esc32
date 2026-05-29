@@ -122,14 +122,20 @@ void hal_pwm_set(float duty_a, float duty_b, float duty_c)
     s_duty[2] = duty_c;
 }
 
+/* Filled in by motor.c when ESC_PLATFORM_SIM is defined; see the rotor
+ * model block at the end of motor_fast_loop(). They give hal_adc_read()
+ * believable bus voltage / current readings that respond to throttle. */
+extern float g_sim_ibus_a;
+extern float g_sim_vbus_v;
+
 void hal_adc_read(float *vbus, float *ibus, float *ia, float *ib, float *ic,
                       float *temp_mos)
 {
-    *vbus = 48.0f;
-    *ibus = (s_duty[0] + s_duty[1] + s_duty[2] - 1.5f) * 40.0f;
+    *vbus = g_sim_vbus_v;
+    *ibus = g_sim_ibus_a;
     *ia = *ibus * 0.33f;
     *ib = *ibus * 0.33f;
-    *ic = *ibus * 0.33f;
+    *ic = -*ia - *ib;
     *temp_mos = 35.0f + (*ibus) * 0.2f;
 }
 

@@ -44,7 +44,7 @@ def main() -> None:
     g.add_argument("--serial", metavar="COM")
     args = ap.parse_args()
 
-    data = json.loads(args.preset_json.read_text(encoding="utf-8"))
+    data = json.loads(args.preset_json.read_text(encoding="utf-8-sig"))
     if args.serial:
         tp = SerialTransport(args.serial, 115200)
     else:

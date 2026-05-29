@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import struct
 import sys
+import time
 import zlib
 from pathlib import Path
 
@@ -42,17 +43,22 @@ def _defaults_dir() -> Path:
     return Path(__file__).resolve().parents[2] / "shared" / "defaults"
 
 
+TELEM_WINDOW_S = 20.0  # rolling-window length on the live plot (seconds)
+
+
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("esc_tool")
         self.resize(1000, 700)
         self._client: EscClient | None = None
+        self._telem_t: list[float] = []
         self._telem_history: dict[str, list] = {
             "rpm": [],
             "ibus": [],
             "vbus": [],
         }
+        self._telem_t0: float | None = None
 
         root = QWidget()
         self.setCentralWidget(root)
@@ -110,12 +116,36 @@ class MainWindow(QMainWindow):
     def _build_telem_tab(self) -> None:
         w = QWidget()
         v = QVBoxLayout(w)
-        self._plot = pg.PlotWidget(title="遥测")
-        self._plot.addLegend()
-        self._curve_rpm = self._plot.plot(pen="y", name="RPM")
-        self._curve_i = self._plot.plot(pen="c", name="I(mA)")
-        self._curve_v = self._plot.plot(pen="g", name="V(mV)")
-        v.addWidget(self._plot)
+
+        glw = pg.GraphicsLayoutWidget()
+        v.addWidget(glw, 1)
+
+        p_rpm = glw.addPlot(row=0, col=0, title="转速 RPM")
+        p_rpm.showGrid(x=True, y=True, alpha=0.25)
+        p_rpm.setLabel("left", "RPM")
+        p_rpm.setYRange(0, 7000, padding=0)
+        p_rpm.disableAutoRange(axis="y")
+        self._curve_rpm = p_rpm.plot(pen=pg.mkPen("y", width=2))
+
+        p_i = glw.addPlot(row=1, col=0, title="母线电流 (A)")
+        p_i.showGrid(x=True, y=True, alpha=0.25)
+        p_i.setLabel("left", "I", units="A")
+        p_i.setYRange(0, 30, padding=0)
+        p_i.disableAutoRange(axis="y")
+        self._curve_i = p_i.plot(pen=pg.mkPen("c", width=2))
+
+        p_v = glw.addPlot(row=2, col=0, title="母线电压 (V)")
+        p_v.showGrid(x=True, y=True, alpha=0.25)
+        p_v.setLabel("left", "V", units="V")
+        p_v.setYRange(40, 50, padding=0)
+        p_v.disableAutoRange(axis="y")
+        self._curve_v = p_v.plot(pen=pg.mkPen("g", width=2))
+
+        self._plots = (p_rpm, p_i, p_v)
+        for p in (p_rpm, p_i):
+            p.setXLink(p_v)
+        p_v.setLabel("bottom", "时间", units="s")
+
         self._lbl_telem = QLabel("未连接")
         v.addWidget(self._lbl_telem)
         self._tabs.addTab(w, "实时曲线")
@@ -239,22 +269,39 @@ class MainWindow(QMainWindow):
             return
         try:
             t = self._client.get_telem()
+            now = time.monotonic()
+            if self._telem_t0 is None:
+                self._telem_t0 = now
+            ts = now - self._telem_t0
+
+            self._telem_t.append(ts)
             for key, val in (
-                ("rpm", t.rpm),
-                ("ibus", t.ibus_ma),
-                ("vbus", t.vbus_mv),
+                ("rpm", float(t.rpm)),
+                ("ibus", t.ibus_ma / 1000.0),
+                ("vbus", t.vbus_mv / 1000.0),
             ):
-                h = self._telem_history[key]
-                h.append(val)
-                if len(h) > 300:
-                    del h[0]
-            x = list(range(len(self._telem_history["rpm"])))
+                self._telem_history[key].append(val)
+
+            cutoff = ts - TELEM_WINDOW_S
+            drop = 0
+            while drop < len(self._telem_t) and self._telem_t[drop] < cutoff:
+                drop += 1
+            if drop:
+                del self._telem_t[:drop]
+                for key in self._telem_history:
+                    del self._telem_history[key][:drop]
+
+            x = self._telem_t
             self._curve_rpm.setData(x, self._telem_history["rpm"])
             self._curve_i.setData(x, self._telem_history["ibus"])
             self._curve_v.setData(x, self._telem_history["vbus"])
+            x_min = max(0.0, ts - TELEM_WINDOW_S)
+            for p in self._plots:
+                p.setXRange(x_min, ts, padding=0)
+
             self._lbl_telem.setText(
                 f"状态={t.state} 故障={t.fault_code} V={t.vbus_mv/1000:.1f}V "
-                f"I={t.ibus_ma}mA RPM={t.rpm} 油门={t.throttle_us}us"
+                f"I={t.ibus_ma/1000:.2f}A RPM={t.rpm} 油门={t.throttle_us}us"
             )
         except Exception:
             pass

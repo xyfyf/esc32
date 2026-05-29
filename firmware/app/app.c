@@ -97,7 +97,7 @@ static void task_slow(void *ctx)
         s_rt.state = ESC_STATE_ARMED;
     }
 
-    if (motor_beep_active()) {
+    if (motor_beep_enabled(&g_params) && motor_beep_active()) {
         motor_set_throttle(&s_motor, &g_params, 0.0f, ESC_STATE_DISARMED);
     } else {
         motor_set_throttle(&s_motor, &g_params, norm, s_rt.state);
